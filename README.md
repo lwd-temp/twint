@@ -49,7 +49,7 @@ pip3 install . -r requirements.txt
 
 **Pip:**
 ```bash
-pip3 install twint
+pip3 install .
 ```
 
 or
