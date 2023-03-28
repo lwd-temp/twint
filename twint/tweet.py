@@ -53,6 +53,11 @@ def _get_reply_to(tw):
                 'screen_name': _mention['screen_name'],
                 'name': _mention['name'],
                 'id': _mention['id_str'],
+                'tweet_id': (
+                    tw.get('in_reply_to_status_id')
+                    if _mention['id'] == tw.get('in_reply_to_user_id')
+                    else None
+                ),
             } for _mention in tw['entities']['user_mentions']
             if tw['display_text_range'][0] > _mention['indices'][1]
         ]

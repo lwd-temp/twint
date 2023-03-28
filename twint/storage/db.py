@@ -2,6 +2,7 @@ import sqlite3
 import sys
 import time
 import hashlib
+import json
 
 from datetime import datetime
 
@@ -112,6 +113,7 @@ def init(db):
                     tweet_id integer not null,
                     user_id integer not null,
                     username text not null,
+                    reply_to_tweet_id integer,
                     CONSTRAINT replies_pk PRIMARY KEY (user_id, tweet_id),
                     CONSTRAINT tweet_id_fk FOREIGN KEY (tweet_id) REFERENCES tweets(id)
                 );
@@ -252,7 +254,7 @@ def tweets(conn, Tweet, config):
                     Tweet.datestamp,
                     Tweet.timestamp,
                     Tweet.timezone,
-                    Tweet.place,
+                    json.dumps(Tweet.place) if Tweet.place else None,
                     Tweet.replies_count,
                     Tweet.likes_count,
                     Tweet.retweets_count,
@@ -261,7 +263,7 @@ def tweets(conn, Tweet, config):
                     Tweet.username,
                     Tweet.name,
                     Tweet.link,
-                    ",".join(Tweet.mentions),
+                    json.dumps(Tweet.mentions) if Tweet.mentions else None,
                     ",".join(Tweet.hashtags),
                     ",".join(Tweet.cashtags),
                     ",".join(Tweet.urls),
@@ -289,8 +291,16 @@ def tweets(conn, Tweet, config):
 
         if Tweet.reply_to:
             for reply in Tweet.reply_to:
-                query = 'INSERT INTO replies VALUES(?,?,?)'
-                cursor.execute(query, (Tweet.id, int(reply['user_id']), reply['username']))
+                query = 'INSERT INTO replies VALUES(?,?,?,?)'
+                cursor.execute(
+                    query,
+                    (
+                        Tweet.id,
+                        int(reply['id']),
+                        reply['screen_name'],
+                        reply['tweet_id'],
+                    ),
+                )
 
         conn.commit()
     except sqlite3.IntegrityError:
