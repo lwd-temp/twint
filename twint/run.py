@@ -234,6 +234,10 @@ class Twint:
 
         await task
 
+        # Close db connection
+        if self.conn:
+            self.conn.close()
+
     async def run(self):
         if self.config.TwitterSearch:
             self.user_agent = await get.RandomUserAgent(wa=True)
