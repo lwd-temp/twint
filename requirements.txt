@@ -11,3 +11,4 @@ schedule
 geopy
 fake-useragent
 googletransx
+rich
