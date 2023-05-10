@@ -19,10 +19,8 @@ class NoMoreTweetsException(Exception):
 def Follow(response):
 
     follows = loads(response)
-    print(follows["users"])
     follow = follows["users"]
     logme.debug(__name__ + ":Follow")
-    soup = BeautifulSoup(response, "html.parser")
     cursor = follows["next_cursor_str"]
 
     return follow, cursor
@@ -45,7 +43,6 @@ def Mobile(response):
 def MobileFav(response):
     from rich import print_json
 
-    print(response)
     soup = BeautifulSoup(response, "html.parser")
     tweets = soup.find_all("table", "tweet")
     max_id = soup.find_all("div", "w-button-more")
@@ -85,7 +82,6 @@ def parse_tweets(config, response, last_cursor):
     if len(response) == 0:
         msg = "No more data!"
         raise NoMoreTweetsException(msg)
-    print(len(response))
     next_cursor = response[-1]["id_str"]
     if response[0]["id_str"] == last_cursor:
         response = response[1:]

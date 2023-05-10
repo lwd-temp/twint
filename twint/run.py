@@ -105,6 +105,7 @@ class Twint:
                         time.sleep(5)
                 elif self.config.Followers or self.config.Following:
                     self.feed, self.init = feed.Follow(response)
+                    print(self.count)
                     if not self.count % 40:
                         time.sleep(5)
                 elif self.config.Profile or self.config.TwitterSearch:

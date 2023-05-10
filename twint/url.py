@@ -30,7 +30,6 @@ async def Favorites(username, init):
     url = f"{mobile}/{username}/favorites?lang=en"
 
     url = f"https://api.twitter.com/1.1/favorites/list.json?screen_name={username}"
-    print(url)
     if init != "-1":
         url += f"&max_id={init}"
 
@@ -40,7 +39,7 @@ async def Favorites(username, init):
 async def Followers(username, init):
     logme.debug(__name__ + ":Followers")
     url = f"{mobile}/{username}/followers?lang=en"
-    url = f"https://api.twitter.com/1.1/followers/list.json?screen_name={username}&count=100"
+    url = f"https://api.twitter.com/1.1/followers/list.json?screen_name={username}&count=200"
 
     if init != "-1":
         url += f"&cursor={init}"
@@ -50,7 +49,7 @@ async def Followers(username, init):
 
 async def Following(username, init):
     logme.debug(__name__ + ":Following")
-    url = f"https://api.twitter.com/1.1/friends/list.json?screen_name={username}&count=100"
+    url = f"https://api.twitter.com/1.1/friends/list.json?screen_name={username}&count=200"
 
     if init != "-1":
         url += f"&cursor={init}"
@@ -131,7 +130,6 @@ async def Search(config, init):
     _serialQuery = _sanitizeQuery(url, params)
     if init != -1:
         url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&count=200&max_id={init}"
-        # url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&count=200&max_id=1602622360611323904"
     else:
         url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&count=200"
     return url, params, _serialQuery
