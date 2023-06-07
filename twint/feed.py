@@ -17,7 +17,6 @@ class NoMoreTweetsException(Exception):
 
 
 def Follow(response):
-
     follows = loads(response)
     follow = follows["users"]
     logme.debug(__name__ + ":Follow")

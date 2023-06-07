@@ -5,7 +5,6 @@ from urllib.parse import urlencode
 from urllib.parse import quote
 
 mobile = "https://mobile.twitter.com"
-base = "https://api.twitter.com/2/search/adaptive.json"
 base = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name"
 
 
@@ -73,6 +72,7 @@ async def Search(config, init):
     tweet_count = 100 if not config.Limit else config.Limit
     q = ""
     params = [
+        ("from", config.Username),
         ("include_can_media_tag", "1"),
         ("include_ext_alt_text", "true"),
         ("include_quote_count", "true"),
@@ -83,7 +83,7 @@ async def Search(config, init):
         ("include_ext_media_availability", "true"),
         ("send_error_codes", "true"),
         ("simple_quoted_tweet", "true"),
-        ("count", tweet_count),
+        ("count", 99),
         ("query_source", "typed_query"),
         ("spelling_corrections", "1"),
         ("ext", "mediaStats%2ChighlightedLabel"),
@@ -129,9 +129,9 @@ async def Search(config, init):
     params.append(("q", q))
     _serialQuery = _sanitizeQuery(url, params)
     if init != -1:
-        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&count=200&max_id={init}"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&max_id={init}"
     else:
-        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}&count=200"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={config.Username}"
     return url, params, _serialQuery
 
 
